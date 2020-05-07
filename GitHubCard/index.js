@@ -1,8 +1,15 @@
+// fetch("https://api.github.com/users/prduren")
+
+// import axios from './node_modules/axios/dist/axios.min.js';
+// const axios = require('axios').default;
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +35,13 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const friendsArray = [
+  'tarannasorus',
+  'cameron-kirby',
+  'wesbos',
+  'stolinski',
+  'glweems',
+];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +62,73 @@ const followersArray = [];
       </div>
     </div>
 */
+function createCard(obj) {
+  // declare variables
+  const wrapper = document.createElement('div');
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('p');
+  const username = document.createElement('h3');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const address = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  // add atrributes
+  wrapper.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  //structure
+  wrapper.appendChild(image);
+  wrapper.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+  profile.appendChild(address);
+
+  //add content
+  image.src = obj.avatar_url; 
+  name.innerHTML = obj.name; 
+  username.innerHTML = obj.login; 
+  location.innerHTML = obj.location; 
+  address.innerHTML = obj.html_url; 
+  address.src = obj.html_url;
+  followers.innerHTML = obj.followers; // still need to add string
+  following.innerHTML = obj.following; // still need to add string
+  bio.innerHTML = obj.bio; 
+
+  return wrapper;
+}
+
+function createUserCard(username) {
+  axios.get(`https://api.github.com/users/${username}`)
+  .then(function(response) {
+    console.log(response);
+    document.querySelector('.cards').appendChild(createCard(response.data));
+  })
+    .catch(function(error){
+      console.log(error);
+    }
+  );  
+}
+
+createUserCard('prduren');
+friendsArray.forEach(item => {
+  createUserCard(item);
+})
+
+contributionsCalendar = document.createElement('div');
+contributionsCalendar.classList.add('calendar');
+document.querySelector('.cards').appendChild(contributionsCalendar);
+new GitHubCalendar('.calendar', 'glweems');
 
 /*
   List of LS Instructors Github username's:
